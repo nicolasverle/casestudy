@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: casestudy
+spec:
+  selector:
+    matchLabels:
+      app: casestudy
+  template:
+    metadata:
+      labels:
+        app: casestudy
+    spec:
+      containers:
+      - name: casestudy
+        image: casestudy:latest
+        commands:
+          - sleep
+          - infinity
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        
