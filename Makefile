@@ -55,11 +55,11 @@ vet: ## Run go vet against code.
 
 .PHONY: build
 build: fmt vet ## Build manager binary.
-	go build -o bin/casestudy main.go
+	go build -o bin/linkextractor main.go
 
 .PHONY: release
 release: fmt vet ## Build manager binary.
-	CGO_ENABLED=0 go build -ldflags "-s -w" -a -trimpath  -o bin/casestudy main.go
+	CGO_ENABLED=0 go build -ldflags "-s -w" -a -trimpath  -o bin/linkextractor main.go
 
 .PHONY: docker-login
 docker-login:

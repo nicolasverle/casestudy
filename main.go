@@ -13,6 +13,8 @@ import (
 var (
 	output string
 
+	// add a root command to launch the extraction of links
+	// more infos about the library : https://github.com/spf13/cobra/blob/main/site/content/user_guide.md
 	linkExtractor = &cobra.Command{
 		Use:   "linkextractor",
 		Short: "Command that will parse a set URLs and extract all the links from their contents",
@@ -41,6 +43,7 @@ var (
 	}
 )
 
+// validateArgs will ensure that all the positional arguments are correct URLs...
 func validateArgs(cmd *cobra.Command, args []string) error {
 	errs := []error{}
 
@@ -65,12 +68,14 @@ func validateArgs(cmd *cobra.Command, args []string) error {
 }
 
 func main() {
+	// execute the root command
 	if err := linkExtractor.Execute(); err != nil {
 		exit(err)
 	}
 }
 
 func init() {
+	// add the output option to change the format of the result
 	linkExtractor.PersistentFlags().StringVarP(&output, "output", "o", "stdout", "format of the output")
 }
 

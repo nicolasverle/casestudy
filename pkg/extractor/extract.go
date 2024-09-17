@@ -30,10 +30,12 @@ func (e *urlExtractor) ExtractAllLinks() ([]string, error) {
 
 	var parseNode func(path string, n *html.Node)
 
+	// a recursive function to parse the htlm nodes and grab all <a href=""> nodes
 	parseNode = func(path string, n *html.Node) {
 		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, attr := range n.Attr {
 				if attr.Key == "href" {
+					// only include the relative paths of the domain.
 					if !strings.HasPrefix(attr.Val, "http") {
 						parsedLinks = append(parsedLinks, fmt.Sprintf("%s%s", path, attr.Val))
 					}
@@ -46,6 +48,7 @@ func (e *urlExtractor) ExtractAllLinks() ([]string, error) {
 		}
 	}
 
+	// concurrently parsing the HTML pages
 	for _, path := range e.urlPaths {
 		eg.Go(func() error {
 			resp, err := http.Get(path)
@@ -74,6 +77,7 @@ func (e *urlExtractor) ExtractAllLinks() ([]string, error) {
 	return sortAndDeduplicate(parsedLinks), nil
 }
 
+// sortAndDeduplicate will sort the result list in order to be able to remove the duplicates
 func sortAndDeduplicate(list []string) []string {
 	slices.Sort(list)
 	return slices.Compact(list)
@@ -82,6 +86,7 @@ func sortAndDeduplicate(list []string) []string {
 func (e *urlExtractor) ToJSON(paths []string) ([]byte, error) {
 	sorted := map[string][]string{}
 
+	// iterate over the paths and build the map with domains as key and relative paths as value...
 	for _, p := range paths {
 		parsedUrl, err := url.Parse(p)
 		if err != nil {
@@ -101,6 +106,7 @@ func (e *urlExtractor) ToJSON(paths []string) ([]byte, error) {
 }
 
 func init() {
+	// allow insecure queries.
 	// not a good practice but for this case study, let's say it's ok...
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 }
