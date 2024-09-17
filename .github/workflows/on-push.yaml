@@ -28,3 +28,13 @@ jobs:
           push: true
           tags: nicolasverle/casestudy:${{ github.sha }}
           provenance: false
+
+  deploy-manifests:
+    runs-on: 
+    - ubuntu-latest
+    steps:
+      - name: Create k8s Kind Cluster
+        uses: container-tools/kind-action@v1
+      - name: deploy
+        run: |
+          make deploy
