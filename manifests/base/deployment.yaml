@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: casestudy
+  namespace: casestudy
 spec:
   selector:
     matchLabels:
@@ -13,7 +14,7 @@ spec:
     spec:
       containers:
       - name: casestudy
-        image: casestudy:latest
+        image: nicolasverle/casestudy:latest
         command:
           - sleep
           - infinity
