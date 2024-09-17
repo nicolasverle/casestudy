@@ -40,4 +40,4 @@ jobs:
         run: |
           make deploy
         env:
-          IMG: ${{ github_sha }}
+          IMG: ${{ github.sha }}
