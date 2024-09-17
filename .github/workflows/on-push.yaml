@@ -40,5 +40,8 @@ jobs:
       - name: deploy
         run: |
           make deploy
+          kubectl wait pods -n casestudy -l app=casestudy --for condition=Ready --timeout=120s
+          testingPod=$(k -n casestudy get po -l app=casestudy -o jsonpath='{.items[0].metadata.name}')
+          kubectl -n casestudy exec $testingPod -- /linkextractor -o json https://news.ycombinator.com/
         env:
           IMG: ${{ github.sha }}
