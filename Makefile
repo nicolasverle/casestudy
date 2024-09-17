@@ -85,6 +85,5 @@ generate:
 
 .PHONY: deploy
 deploy: 
-	$(KUSTOMIZE) edit set image server=${IMG}
 	$(KUSTOMIZE) build manifests/test | kubectl apply -f -
 
